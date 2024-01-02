@@ -1,5 +1,8 @@
 -module(tictactoe).
--export([start_link/0, new/0, play/4, check/1, welcome_message/0, print_board/1]).
+
+-include_lib("eunit/include/eunit.hrl").
+
+-export([start_link/0, new/0, play/4, check/1, welcome_message/0, print_board/1, test_check/0, run_tests/0]).
 
 start_link() ->
     {ok, Pid} = gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
@@ -91,6 +94,17 @@ check(Board) ->
 
         _ -> ok
     end.
+
+%% Testing
+test_check() ->
+    [
+        ?_assertEqual({victory, x}, check({x, x, x, undefined, undefined, undefined, undefined, undefined, undefined})),
+        ?_assertEqual({victory, x}, check({undefined, undefined, undefined, x, x, x, undefined, undefined, undefined})),
+        ?_assertEqual({victory, o}, check({o, undefined, undefined, o, undefined, undefined, o, undefined, undefined}))
+    ].
+
+run_tests() ->
+    eunit:test(tictactoe).
 
 welcome_message() ->
     io:format("Bienvenido al Tic Tac Toe de Leo Castillo!~n~n").
